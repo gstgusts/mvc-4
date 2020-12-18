@@ -44,6 +44,15 @@
             <label for="vinNumber" class="form-label">Vin number</label>
             <input type="text" class="form-control" name="vinNumber" id="vinNumber" th:value="${car.getVinNumber()}">
         </div>
+        <div class="mb-3">
+            <label for="ownerId" class="form-label">Owner</label>
+<!--            <input type="text" class="form-control" name="owner" id="owner" readonly th:value="${car.getOwner() != null ? car.getOwner().getName() : ''}">-->
+<!--            <span th:text="${car.getOwner() != null ? car.getOwner().getName() : ''}"></span>-->
+            <select name="ownerId" id="ownerId" class="form-control">
+                <option th:selected="${car.getOwner() == null}" value="0" placeholder="Select owner"></option>
+                <option th:selected="${car.getOwner() != null && car.getOwner().getId() == owner.getId()}" th:each="owner: ${owners}" th:value="${owner.getId()}" th:text="${owner.getName() + ' ' + owner.getSurname()}"></option>
+            </select>
+        </div>
         <a href="/cars" class="btn btn-danger" role="button">Cancel</a>
         <button type="submit" class="btn btn-success">Save</button>
     </form>

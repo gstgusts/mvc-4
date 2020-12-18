@@ -21,6 +21,6 @@ public class Car {
     @Column(name = "vin_number")
     private String vinNumber;
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name="owner_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name="owner_id", referencedColumnName = "id", nullable = true)
     private Owner owner;
 }

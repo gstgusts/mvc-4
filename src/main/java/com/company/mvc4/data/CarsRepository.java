@@ -1,8 +1,10 @@
 package com.company.mvc4.data;
 
 import com.company.mvc4.dto.CarSearchDto;
+import lombok.NonNull;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
@@ -55,7 +57,22 @@ public class CarsRepository {
         var session = factory.openSession();
 
         try {
-            return session.get(Car.class, id);
+            var car = session.get(Car.class, id);
+            return car;
+        } catch (HibernateException exception) {
+            System.err.println(exception);
+        } finally {
+            session.close();
+        }
+
+        return null;
+    }
+
+    public Owner getOwner(int id) {
+        var session = factory.openSession();
+
+        try {
+            return session.get(Owner.class, id);
         } catch (HibernateException exception) {
             System.err.println(exception);
         } finally {
@@ -107,5 +124,41 @@ public class CarsRepository {
         }
 
         return new ArrayList<>();
+    }
+
+    public void save(@NonNull Object item) {
+        var session = factory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.update(item);
+            tx.commit();
+        } catch (HibernateException exception) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            System.err.println(exception);
+        } finally {
+            session.close();
+        }
+    }
+
+    public void addCar(@NonNull Car car) {
+        var session = factory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            session.save(car);
+            tx.commit();
+        } catch (HibernateException exception) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            System.err.println(exception);
+        } finally {
+            session.close();
+        }
     }
 }
