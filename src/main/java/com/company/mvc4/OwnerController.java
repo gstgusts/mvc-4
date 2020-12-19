@@ -2,6 +2,7 @@ package com.company.mvc4;
 
 import com.company.mvc4.data.Car;
 import com.company.mvc4.data.CarsRepository;
+import com.company.mvc4.dto.CarListItemDto;
 import com.company.mvc4.dto.CarSearchDto;
 import com.company.mvc4.dto.CarUpdateDto;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class OwnerController {
@@ -48,8 +53,35 @@ public class OwnerController {
 
         var items = repo.getCars();
 
+//        List<CarListItemDto> listItems = new ArrayList<>();
+//        int i = 1;
+//        for (var car : items) {
+//            listItems.add(new CarListItemDto(car, i));
+//            ++i;
+//        }
+
         model.addAttribute("title", "Cars");
         model.addAttribute("cars", items);
+
+        return "cars";
+    }
+
+    @GetMapping("/cars/delete/{id}")
+    public ModelAndView deleteCar(@PathVariable int id) {
+        repo.deleteCar(id);
+        return new ModelAndView("redirect:/cars");
+    }
+
+    @GetMapping("/cars/confirm/{id}")
+    public String confirmCarDelete(@PathVariable int id, Model model) {
+
+        var items = repo.getCars();
+
+        var car = repo.getCar(id);
+
+        model.addAttribute("title", "Cars");
+        model.addAttribute("cars", items);
+        model.addAttribute("confirmDelete", car);
 
         return "cars";
     }

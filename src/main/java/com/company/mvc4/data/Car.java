@@ -13,14 +13,14 @@ import javax.persistence.*;
 @Table(name="car")
 public class Car {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     @Column(name = "number")
     private String number;
     @Column(name = "vin_number")
     private String vinNumber;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name="owner_id", referencedColumnName = "id", nullable = true)
     private Owner owner;
 }

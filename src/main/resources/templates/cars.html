@@ -17,7 +17,8 @@
             <a class="navbar-brand" href="/cars">
                 <img th:src="@{/img/van.svg}" alt="Cars" width="30">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -49,31 +50,47 @@
 
     <ul class="nav justify-content-end">
         <li class="nav-item">
-             <a href="/cars/0" class="btn btn-primary" style="margin-top: 5px">Add car</a>
+            <a href="/cars/0" class="btn btn-primary" style="margin-top: 5px">Add car</a>
         </li>
     </ul>
 
+    <div class="alert alert-danger confirmation-alert" role="alert" th:if="${confirmDelete != null}">
+        Do you want to delete <span class="delete-item" th:text="${confirmDelete != null ? confirmDelete.getNumber() : ''}"></span>?
+        <a th:href="${confirmDelete != null ? '/cars/delete/'+confirmDelete.getId() : '/cars'}" class="btn btn-danger">Delete</a>
+        <a href="/cars" class="btn btn-success">Cancel</a>
+    </div>
+
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Number</th>
-                <th>Vin Number</th>
-                <th>Owner</th>
-            </tr>
+        <tr>
+            <th>Number</th>
+            <th>Vin Number</th>
+            <th>Owner</th>
+            <th>&nbsp;</th>
+        </tr>
         </thead>
         <tbody>
-            <tr th:each="car: ${cars}">
-                <td th:text="${car.getId()}"/>
-                <td>
-                    <a th:href="${'/cars/'+car.getId()}" th:text="${car.getNumber()}"></a>
-                </td>
-                <td th:text="${car.getVinNumber()}"/>
-                <td th:text="${car.getOwner() != null ? car.getOwner().getName() : ''}"/>
-            </tr>
+        <tr th:each="car: ${cars}">
+            <td>
+                <a th:href="${'/cars/'+car.getId()}" th:text="${car.getNumber()}"></a>
+            </td>
+            <td th:text="${car.getVinNumber()}"/>
+            <td th:text="${car.getOwner() != null ? car.getOwner().getName() : ''}"/>
+            <td class="action-column">
+                <a th:href="${'/cars/' + car.getId()}" class="btn btn-outline-info">
+                    <img th:src="@{/img/edit.svg}">
+                </a>
+                <a th:href="${'/cars/confirm/'+car.getId()}" class="btn btn-outline-danger">
+                    <!--                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#dddddd" class="bi bi-trash-fill" viewBox="0 0 16 16">-->
+                    <!--                            <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>-->
+                    <!--                        </svg>-->
+                    <img th:src="@{/img/trash.svg}">
+                </a>
+            </td>
+        </tr>
         </tbody>
     </table>
-    <!--<img th:src="@{/img/123.jpg}">-->
+    <!--    <img th:src="@{/img/123.jpg}">-->
 </div>
 </body>
 </html>

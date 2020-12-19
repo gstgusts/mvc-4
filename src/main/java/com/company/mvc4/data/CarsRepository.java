@@ -161,4 +161,25 @@ public class CarsRepository {
             session.close();
         }
     }
+
+    public void deleteCar(int id) {
+        var session = factory.openSession();
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            var car = session.get(Car.class, id);
+            if(car != null) {
+                session.delete(car);
+            }
+            tx.commit();
+        } catch (HibernateException exception) {
+            if(tx != null) {
+                tx.rollback();
+            }
+            System.err.println(exception);
+        } finally {
+            session.close();
+        }
+    }
 }
