@@ -17,8 +17,25 @@ public class ApiCarController {
     }
 
     @GetMapping("/cars")
-    public Iterable<Car> getCars() {
-        return repo.getCars();
+    public Iterable<Car> getCars(@RequestParam(value="number", required = false) String number,
+                                 @RequestParam(value="vinNumber", required = false) String vinNumber) {
+
+        if(number != null || vinNumber != null) {
+            var serachDto = new CarSearchDto("","");
+
+            if(number != null) {
+                serachDto.setNumber(number);
+            }
+
+            if(vinNumber != null) {
+                serachDto.setVinNumber(vinNumber);
+            }
+
+            return repo.getCars(serachDto);
+
+        } else {
+            return repo.getCars();
+        }
     }
 
     @PostMapping(value = "/cars", consumes = { MediaType.APPLICATION_JSON_VALUE })
